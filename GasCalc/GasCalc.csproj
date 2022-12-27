@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Configurations>Debug;Release;Dev</Configurations>
+  </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Dev'">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<EnvironmentName>Development</EnvironmentName>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<DebugType>pdbonly</DebugType>
+		<Optimize>True</Optimize>
+		<EnvironmentName>Test</EnvironmentName>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebugType>pdbonly</DebugType>
+		<Optimize>true</Optimize>
+		<EnvironmentName>Production</EnvironmentName>
+	</PropertyGroup>
+	
+	<ItemGroup Condition="'$(Configuration)' != 'Dev'">
+		<Content Remove="appsettings.json" />
+		<Content Remove="stylecop.json" />
+		<Content Remove="appsettings.*.json" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' != 'Dev'">
+		<Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+		<Content Include="appsettings.*.json" Exclude="appsettings.$(EnvironmentName).json" DependentUpon="appsettings.json" CopyToOutputDirectory="Never" />
+		<AdditionalFiles Include="stylecop.json" />
+		<Content Include="appsettings.$(EnvironmentName).json" DependentUpon="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Remove="stylecop.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <AdditionalFiles Include="stylecop.json" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="NLog.Database" Version="5.1.0" />
+	  <PackageReference Include="NLog.Web.AspNetCore" Version="5.2.0" />
+	  <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+	<Target Name="RenameAppsettings" AfterTargets="Publish">
+		<Move SourceFiles="$(PublishDir)\appsettings.$(EnvironmentName).json" DestinationFiles="$(PublishDir)\appsettings.$(EnvironmentName).json" />
+	</Target>
+	
+</Project>
+
