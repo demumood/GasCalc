@@ -4,10 +4,19 @@
 
 namespace GasCalc.Models
 {
+    /// <summary>
+    /// The error viewmodel.
+    /// </summary>
     public class ErrorViewModel
     {
+        /// <summary>
+        /// Gets or sets the request id.
+        /// </summary>
         public string? RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        /// <summary>
+        /// Gets a value indicating whether to show request id.
+        /// </summary>
+        public bool ShowRequestId => !string.IsNullOrEmpty(this.RequestId);
     }
 }

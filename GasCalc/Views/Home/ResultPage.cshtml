@@ -1,0 +1,78 @@
+﻿@model GasCalc.Models.ViewModels.GasClacViewModel;
+@{
+    ViewData["Title"] = "Results Page";
+}
+
+<form asp-action="ResultsPage" method="post" class="needs-validation" enctype="multipart/form-data">
+    @*---Page heading---*@
+    <div class="text-center">
+        <h1 class=display-4>@ViewData["Title"]</h1>
+        <hr />
+    </div>
+
+    <div class="container">
+
+        @*--- Error Messages ---*@
+        <div asp-validation-summary="All" class="alert-danger">
+            <span>Please correct the following errors</span>
+        </div>
+
+        @*---Success Message---*@
+        <div class="mb-3 row" style="display:@ViewBag.displaySuccessMsg">
+            <h2 class="@ViewBag.displayMsgColor">@ViewBag.SuccessMsg</h2> <br />
+        </div>
+
+
+        @*--- Current Gas Amount  ---*@
+        @{
+            this.ViewBag.CurrentGasAmountDesc = Model.CurrentGasAmount <= 0 ? "Empty Tank" : Model.CurrentGasAmount > 0 && Model.CurrentGasAmount <= 25 ? "Quarter Tank" : Model.CurrentGasAmount > 25 && Model.CurrentGasAmount <= 50 ? "Half Tank" : Model.CurrentGasAmount > 50 && Model.CurrentGasAmount <= 75 ? "Three Quarter Tank" : Model.CurrentGasAmount > 75 && Model.CurrentGasAmount <= 100 ? "Full Tank" : "Full Tank";
+
+            this.ViewBag.Style = $"{Model.CurrentGasAmount}%";
+
+            this.ViewBag.ClassBg = Model.CurrentGasAmount <= 0 ? "bg-danger" : Model.CurrentGasAmount > 0 && Model.CurrentGasAmount <= 25 ? "bg-danger" : Model.CurrentGasAmount > 25 && Model.CurrentGasAmount <= 50 ? "bg-warning" : Model.CurrentGasAmount > 50 && Model.CurrentGasAmount <= 75 ? "bg-info" : Model.CurrentGasAmount > 75 && Model.CurrentGasAmount <= 100 ? "bg-success" : "bg-success";
+
+        }
+
+        <div class="mb-3 row">
+            <div class="col-md-12">
+                <span style="font-weight: bold">Current Amount of Gas:</span> <em>@ViewBag.CurrentGasAmountDesc</em> <br />
+
+                <div class="progress" style="height:30px">
+                    <div title="CurrentGasAmount" class="progress-bar progress-bar-striped progress-bar-animated @ViewBag.ClassBg" role="progressbar" style="height:30px; width: @ViewBag.Style" aria-valuenow="@Model.CurrentGasAmount" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>  
+    </div>
+</form>
+
+
+@section Scripts {
+    <script>
+
+        function loading() {
+            $(".btn .fa-spinner").show();
+            $(".btn .btn-text").html("Loading");
+        }
+
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}

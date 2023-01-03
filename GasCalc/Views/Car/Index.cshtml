@@ -1,0 +1,94 @@
+﻿@model GasCalc.Models.ViewModels.CarViewModel;
+@{
+    ViewData["Title"] = "Find Car Tank Capacity";
+}
+
+<form asp-action="Index" method="post" class="needs-validation" enctype="multipart/form-data">
+    @*---Page heading---*@
+    <div class="text-center">
+        <h1 class=display-4>@ViewData["Title"]</h1>
+        <hr />
+    </div>
+
+    <div class="container">
+
+        @*--- Error Messages ---*@
+        <div asp-validation-summary="All" class="alert-danger">
+            <span>Please correct the following errors</span>
+        </div>
+
+        @*---Success Message---*@
+        <div class="mb-3 row" style="display:@ViewBag.displaySuccessMsg">
+            <h2 class="@ViewBag.displayMsgColor">@ViewBag.SuccessMsg</h2> <br />
+        </div>
+
+        @*--- Car Information ---*@
+        <div class="mb-3 row">
+            @*--- Car Year ---*@
+            <div class="col-md-4">
+                <div class="form-floating">
+                    <input asp-for="CarYear" class="form-control" id="carYear" required>
+                    <label asp-for="CarYear" for="carYear" class="required"></label>
+                    <span class="text-danger"></span>
+                    <span asp-validation-for="CarYear" class="text-danger"></span>
+                </div>
+            </div>
+            @*--- Car Make ---*@
+            <div class="col-md-4">
+                <div class="form-floating">
+                    <input asp-for="CarMake" class="form-control" id="lastName" required>
+                    <label asp-for="CarMake" for="lastName" class="required">Last Name</label>
+                    <span asp-validation-for="CarMake" class="text-danger"></span>
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+            @*--- Car Model ---*@
+            <div class="col-md-4">
+                <div class="form-floating">
+                    <input class="form-control" id="lastName" required>
+                    <label asp-for="CarModel" for="lastName" class="required">Last Name</label>
+                    <span asp-validation-for="CarYear" class="text-danger"></span>
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        @*---Submit button---*@
+        <div>
+            <button type="submit" name="submit" id="submit" class="btn btn-primary" onclick="loading()"><i class="fas fa-spinner fa-spin" style="display:none;"></i> <i class="fa-solid fa-paper-plane"></i> Submit</button>
+        </div>
+
+    </div>
+</form>
+
+
+@section Scripts {
+    <script>
+
+        function loading() {
+            $(".btn .fa-spinner").show();
+            $(".btn .btn-text").html("Loading");
+        }
+
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}

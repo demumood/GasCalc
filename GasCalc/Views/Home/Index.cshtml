@@ -1,8 +1,119 @@
-﻿@{
+﻿@model GasCalc.Models.ViewModels.GasClacViewModel;
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<form asp-action="Index" method="post" class="needs-validation" enctype="multipart/form-data">
+    @*---Page heading---*@
+    <div class="text-center">
+        <h1 class=display-4>@ViewData["Title"]</h1>
+        <hr />
+    </div>
+
+    <div class="container">
+
+        @*--- Error Messages ---*@
+        <div asp-validation-summary="All" class="alert-danger">
+            <span>Please correct the following errors</span>
+        </div>
+
+        @*---Success Message---*@
+        <div class="mb-3 row" style="display:@ViewBag.displaySuccessMsg">
+            <h2 class="@ViewBag.displayMsgColor">@ViewBag.SuccessMsg</h2> <br />
+        </div>
+
+        <input type="hidden" asp-for="GasCalcResults" value="@ViewBag.GasCalc" />
+
+        @*--- Get Tank Size  ---*@
+        <div class="mb-3 row">
+            <div class="col-md-12">
+                <a class="btn btn-outline-primary" asp-action="Index" asp-controller="Car">Get your car's Tank Size</a>
+            </div>
+        </div>
+
+        @*--- Input Information ---*@
+        <div class="mb-3 row">
+            @*--- Tank Size ---*@
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="TankSize" class="form-control" id="tankSize" required>
+                    <label asp-for="TankSize" for="tankSize" class="required"></label>
+                    <span class="text-danger"></span>
+                    <span asp-validation-for="TankSize" class="text-danger"></span>
+                </div>
+            </div>
+
+           @*--- Amount to spend ---*@
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="AmountToSpend" asp-format="{0:#,###.00}" class="form-control" id="amountToSpend" required>
+                    <label asp-for="AmountToSpend" for="amountToSpend" class="required"></label>                 
+                    <span asp-validation-for="AmountToSpend" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            @*---  Current Gas Amount ---*@
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <select asp-for="CurrentGasAmount" asp-items="@ViewBag.tankInformation" class="form-control" id="currentGasAmount" required>
+                        <option value="">Select Amount</option>
+                    </select>
+                    <label asp-for="CurrentGasAmount" for="currentGasAmount" class="required"></label>
+                    <span asp-validation-for="CurrentGasAmount" class="text-danger"></span>
+                </div>
+            </div>
+
+            @*---  Zipcode ---*@
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="Zipcode" class="form-control" id="zipcode" required>
+                    <label asp-for="Zipcode" for="zipcode" class="required"></label>
+                    <span asp-validation-for="Zipcode" class="text-danger"></span>
+                </div>
+            </div>
+            
+        </div>
+
+
+        @*---Submit button---*@
+        <div>
+            <button type="submit" name="submit" id="submit" class="btn btn-primary" onclick="loading()"><i class="fas fa-spinner fa-spin" style="display:none;"></i> <i class="fa-solid fa-paper-plane"></i> Submit</button>
+        </div>
+
+    </div>
+</form>
+
+
+@section Scripts {
+    <script>
+
+        function loading()
+        {
+          $(".btn .fa-spinner").show();
+          $(".btn .btn-text").html("Loading");
+        }
+
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+}
